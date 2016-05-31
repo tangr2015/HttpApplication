@@ -23,6 +23,11 @@ public class User {
     private String avatar;
     private String token;
 
+    @Override
+    public String toString() {
+        return this.getId()+"..."+this.getUsername();
+    }
+
     public String getId() {
         return id;
     }

@@ -11,10 +11,22 @@
     tools:context="com.tangr.httpapplication.MainActivity">
 
     <Button
-        android:id="@+id/bt"
+        android:id="@+id/bt_string"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="get"/>
+        android:text="string"/>
+
+    <Button
+        android:id="@+id/bt_gson"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="gson"/>
+
+    <Button
+        android:id="@+id/bt_file"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="file"/>
 
     <TextView
         android:id="@+id/tv"
