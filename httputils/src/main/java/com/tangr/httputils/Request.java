@@ -15,7 +15,6 @@ public class Request {
     public Map<String,String> headers;
     public RequestMethod method;
     public ICallBack iCallBack;
-    public boolean enableProgress = false;
     public int maxRetryCount = 0;
     private volatile boolean isCancelled;
 

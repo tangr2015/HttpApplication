@@ -15,6 +15,7 @@ import com.tangr.httputils.Request;
 import com.tangr.httputils.core.RequestTask;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -68,6 +69,28 @@ public class MainActivity extends AppCompatActivity {
                 new RequestTask(request).execute();
             }
         });
+        findViewById(R.id.bt_list).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "http://api.stay4it.com/v1/public/core/?service=user.getAll";
+                url += "&timestamp=" + System.currentTimeMillis() + "&count=10";
+                Request request = new Request(url, Request.RequestMethod.GET);
+                request.setOnResponseListener(new GsonCallback<ArrayList<Bean>>() {
+                    @Override
+                    public void onSuccess(ArrayList<Bean> result) {
+                        for (Bean b:result){
+                            Log.i("sss",b.toString());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(AppException e) {
+
+                    }
+                });
+                new RequestTask(request).execute();
+            }
+        });
         findViewById(R.id.bt_file).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }.setCachePath(path));
-                request.enableProgress = true;
                 task.execute();
             }
         });

@@ -1,9 +1,12 @@
 package com.tangr.httputils.core;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.tangr.httputils.AppException;
 import com.tangr.httputils.Request;
+import com.tangr.httputils.callback.impl.FileCallback;
+import com.tangr.httputils.callback.impl.StringCallback;
 import com.tangr.httputils.itf.onProgressUpdateListener;
 
 import java.io.IOException;
@@ -51,7 +54,7 @@ public class RequestTask extends AsyncTask<Void,Integer,Object>{
 
     private Object request(int retry) {
         try {
-            if(request.enableProgress){
+            if(request.iCallBack instanceof FileCallback){
                 return request.iCallBack.parse(HttpConnection.excute(request), new onProgressUpdateListener() {
                     @Override
                     public void onProgressUpdate(int current, int total) {

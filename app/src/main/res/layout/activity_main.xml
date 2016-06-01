@@ -23,6 +23,12 @@
         android:text="gson"/>
 
     <Button
+        android:id="@+id/bt_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="list"/>
+
+    <Button
         android:id="@+id/bt_file"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
