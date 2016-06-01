@@ -1,5 +1,6 @@
 package com.tangr.httputils.callback.impl;
 
+import com.tangr.httputils.AppException;
 import com.tangr.httputils.callback.AbstractCallback;
 
 /**
@@ -7,7 +8,7 @@ import com.tangr.httputils.callback.AbstractCallback;
  */
 public abstract class FileCallback extends AbstractCallback<String>{
     @Override
-    protected String bindData(String s) throws Exception {
+    protected String bindData(String s) throws AppException {
         return s;
     }
 }

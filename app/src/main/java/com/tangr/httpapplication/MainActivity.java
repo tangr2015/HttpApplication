@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.tangr.httputils.AppException;
 import com.tangr.httputils.callback.impl.FileCallback;
 import com.tangr.httputils.callback.impl.GsonCallback;
 import com.tangr.httputils.callback.impl.StringCallback;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Exception e) {
+                    public void onFailure(AppException e) {
 
                     }
                 });
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Exception e) {
+                    public void onFailure(AppException e) {
 
                     }
                 });
@@ -70,9 +71,11 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.bt_file).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "http://api.stay4it.com/uploads/test.jpg";
+//                String url = "http://api.stay4it.com/uploads/test.jpg";
+                String url = "http://ws.stream.qqmusic.qq.com/1530858.m4a?fromtag=46";
                 Request request = new Request(url);
-                String path = Environment.getExternalStorageDirectory() + File.separator + "test.jpg";
+                final RequestTask task = new RequestTask(request);
+                String path = Environment.getExternalStorageDirectory() + File.separator + "pm.m4a";
                 request.setOnResponseListener(new FileCallback() {
                     @Override
                     public void onSuccess(String result) {
@@ -80,10 +83,22 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Exception e) {
+                    public void onFailure(AppException e) {
+                        Log.i("sss",e.toString());
+                        tv.setText(e.toString());
+                    }
 
+                    @Override
+                    public void onProgressUpdate(int current, int total) {
+                        Log.i("sss","cur:"+current+",total:"+total);
+                        tv.setText("cur:"+current+",total:"+total);
+                        if(current * 100l / total > 50){
+                            task.cancel();
+                        }
                     }
                 }.setCachePath(path));
+                request.enableProgress = true;
+                task.execute();
             }
         });
     }

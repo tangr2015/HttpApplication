@@ -1,5 +1,6 @@
 package com.tangr.httputils.callback.impl;
 
+import com.tangr.httputils.AppException;
 import com.tangr.httputils.callback.AbstractCallback;
 
 import java.net.HttpURLConnection;
@@ -9,7 +10,7 @@ import java.net.HttpURLConnection;
  */
 public abstract class StringCallback extends AbstractCallback<String>{
     @Override
-    protected String bindData(String s) {
+    protected String bindData(String s) throws AppException {
         return s;
     }
 }

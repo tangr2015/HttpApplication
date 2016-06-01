@@ -15,6 +15,9 @@ public class Request {
     public Map<String,String> headers;
     public RequestMethod method;
     public ICallBack iCallBack;
+    public boolean enableProgress = false;
+    public int maxRetryCount = 0;
+    private volatile boolean isCancelled;
 
     public Request(String url){
         this.url = url;
@@ -28,5 +31,16 @@ public class Request {
 
     public void setOnResponseListener(ICallBack iCallBack){
         this.iCallBack = iCallBack;
+    }
+
+    public void cancel() {
+        isCancelled = true;
+        iCallBack.cancel();
+    }
+
+    public void checkIfCancelled() throws AppException {
+        if (isCancelled){
+            throw new AppException(AppException.ErrorType.CANCEL,"the request has been cancelled");
+        }
     }
 }

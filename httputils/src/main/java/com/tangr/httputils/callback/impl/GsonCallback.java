@@ -1,6 +1,7 @@
 package com.tangr.httputils.callback.impl;
 
 import com.google.gson.Gson;
+import com.tangr.httputils.AppException;
 import com.tangr.httputils.callback.AbstractCallback;
 
 import org.json.JSONException;
@@ -14,7 +15,7 @@ import java.lang.reflect.Type;
  */
 public abstract class GsonCallback<T> extends AbstractCallback<T>{
     @Override
-    protected T bindData(String s) throws Exception {
+    protected T bindData(String s) throws AppException {
         try {
             JSONObject json = new JSONObject(s);
             Object data = json.opt("data");
@@ -22,7 +23,7 @@ public abstract class GsonCallback<T> extends AbstractCallback<T>{
             Type type = ((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
             return gson.fromJson(data.toString(), type);
         } catch (JSONException e) {
-            throw new JSONException("JSONException");
+            throw new AppException(AppException.ErrorType.JSON,e.getMessage());
         }
     }
 }
