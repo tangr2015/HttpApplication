@@ -7,6 +7,7 @@ import com.tangr.httputils.AppException;
 import com.tangr.httputils.Request;
 import com.tangr.httputils.callback.impl.FileCallback;
 import com.tangr.httputils.callback.impl.StringCallback;
+import com.tangr.httputils.callback.impl.UploadFileCallback;
 import com.tangr.httputils.itf.onProgressUpdateListener;
 
 import java.io.IOException;
@@ -61,6 +62,14 @@ public class RequestTask extends AsyncTask<Void,Integer,Object>{
                         publishProgress(current,total);
                     }
                 });
+            }else if(request.iCallBack instanceof UploadFileCallback){
+                UploadUtil.setOnUpdateListener(new onProgressUpdateListener() {
+                    @Override
+                    public void onProgressUpdate(int current, int total) {
+                        publishProgress(current,total);
+                    }
+                });
+                return request.iCallBack.parse(HttpConnection.excute(request));
             }else {
                 return request.iCallBack.parse(HttpConnection.excute(request));
             }

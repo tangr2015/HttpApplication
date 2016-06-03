@@ -47,12 +47,15 @@ public abstract class AbstractCallback<T> implements ICallBack<T>{
                     int totalLen = con.getContentLength();
                     int curLen = 0;
                     int len;
+                    int percent = 0;
                     while ((len = is.read(buffer)) != -1) {
                         checkIfCancelled();
                         out.write(buffer, 0, len);
                         curLen += len;
                         if (listener != null) {
-                            listener.onProgressUpdate(curLen, totalLen);
+                            if (curLen * 100l / totalLen > percent) {
+                                listener.onProgressUpdate(curLen, totalLen);
+                            }
                         }
                     }
                     is.close();

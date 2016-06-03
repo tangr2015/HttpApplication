@@ -58,10 +58,12 @@ public class HttpConnection {
     }
 
     private static HttpURLConnection post(Request request) throws AppException {
+        HttpURLConnection httpURLConnection = null;
+        OutputStream os = null;
         try {
             request.checkIfCancelled();
 
-            HttpURLConnection httpURLConnection =  (HttpURLConnection) new URL(request.url).openConnection();
+            httpURLConnection =  (HttpURLConnection) new URL(request.url).openConnection();
             httpURLConnection.setConnectTimeout(5000);
             httpURLConnection.setReadTimeout(5000);
             httpURLConnection.setDoInput(true);
@@ -73,17 +75,30 @@ public class HttpConnection {
 
             request.checkIfCancelled();
 
-            OutputStream os = httpURLConnection.getOutputStream();
-            os.write(request.content.getBytes());
+            os = httpURLConnection.getOutputStream();
+
+            if(request.fileEntities != null){
+                UploadUtil.upload(os,request.content,request.fileEntities);
+            }else if(request.content != null){
+                os.write(request.content.getBytes());
+            }else {
+                throw new AppException(AppException.ErrorType.INVALID,"the post request has no post content");
+            }
 
             request.checkIfCancelled();
-
-            return httpURLConnection;
         }catch (InterruptedIOException e){
             throw new AppException(AppException.ErrorType.TIMEOUT,e.getMessage());
         }catch (IOException e) {
             throw new AppException(AppException.ErrorType.IO,e.getMessage());
+        }finally {
+            try {
+                os.flush();
+                os.close();
+            } catch (IOException e) {
+                throw new AppException(AppException.ErrorType.IO, "the post outputstream can't be closed");
+            }
         }
+        return httpURLConnection;
     }
 
     private static void addHeader(HttpURLConnection con,Map<String, String> headers){

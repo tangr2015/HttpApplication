@@ -2,6 +2,8 @@ package com.tangr.httputils;
 
 import com.tangr.httputils.callback.ICallBack;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -17,6 +19,7 @@ public class Request {
     public ICallBack iCallBack;
     public int maxRetryCount = 0;
     private volatile boolean isCancelled;
+    public ArrayList<FileEntity> fileEntities;
 
     public Request(String url){
         this.url = url;
@@ -41,5 +44,12 @@ public class Request {
         if (isCancelled){
             throw new AppException(AppException.ErrorType.CANCEL,"the request has been cancelled");
         }
+    }
+
+    public void addHeader(String key, String value) {
+        if (headers == null){
+            headers = new HashMap<String,String>();
+        }
+        headers.put(key,value);
     }
 }
